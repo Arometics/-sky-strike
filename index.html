@@ -1,0 +1,66 @@
+# -sky-strike
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Strike: Elite Combat - Radwan</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
+        #ui { position: absolute; top: 20px; left: 20px; color: lime; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <h1>Sky Strike: Elite</h1>
+        <p>Made by Radwan-Islam-Alif</p>
+        <p>Use Joystick/Touch to Fly</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Game Logic Shuru
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb); // Akash-er rong
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Simple Fighter Jet (Box structure)
+        const jetGroup = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.3, 2), new THREE.MeshStandardMaterial({color: 0x555555}));
+        const wings = new THREE.Mesh(new THREE.BoxGeometry(2, 0.05, 0.8), new THREE.MeshStandardMaterial({color: 0x333333}));
+        jetGroup.add(body, wings);
+        scene.add(jetGroup);
+
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 5, 5).normalize();
+        scene.add(light, new THREE.AmbientLight(0x404040));
+
+        camera.position.z = 5;
+        camera.position.y = 2;
+        camera.lookAt(jetGroup.position);
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            // Auto Forward Movement
+            jetGroup.position.z -= 0.05; 
+            camera.position.z -= 0.05; // Camera jet-er sathe cholbe
+            
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
